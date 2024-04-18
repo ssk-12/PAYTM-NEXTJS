@@ -32,15 +32,23 @@ export async function p2pTransfer(to: string, amount: number) {
             throw new Error('Insufficient funds');
           }
 
+          console.log("Number(from)",Number(from));
+
           await tx.balance.update({
             where: { userId: Number(from) },
             data: { amount: { decrement: amount } },
           });
 
+
+          console.log("Number(from)",Number(from));
+          console.log("amt",amount);
+          console.log("Number(to)",toUser.id );
+          console.log("amt",amount);
           await tx.balance.update({
             where: { userId: toUser.id },
             data: { amount: { increment: amount } },
           });
+          
 
           await tx.p2pTransfer.create({
             data: {
