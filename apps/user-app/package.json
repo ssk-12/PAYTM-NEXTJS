@@ -14,9 +14,11 @@
     "next-auth": "^4.24.7",
     "react": "^18",
     "react-dom": "^18",
+    "recoil": "^0.7.7",
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@repo/ui": "*",
     "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^18",
