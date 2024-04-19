@@ -48,6 +48,13 @@ export const authOptions: NextAuthOptions = {
                             password: hashedPassword
                         }
                     });
+                    const balance = await db.balance.create({
+                        data: {
+                            userId: user.id,
+                            amount: 1000,  
+                            locked: 0   
+                        }
+                    });
                 
                     return {
                         id: user.id.toString(),
