@@ -4,6 +4,17 @@ import bcrypt from "bcrypt";
 import { NextAuthOptions } from "next-auth";
 import { ZodError, z } from "zod";
 
+declare module "next-auth" {
+    interface Session {
+      user: {
+        id: string;
+        name?: string | null;
+        email?: string | null;
+        image?: string | null;
+      }
+    }
+  }
+
 const credentialsSchema = z.object({
     phone: z.string(),
     password: z.string(),
