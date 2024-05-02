@@ -2,11 +2,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 // import prisma from "@repo/db/client";
-// import prisma from "@/db";
-
-import { PrismaClient, Prisma } from '@prisma/client';
-
-const prisma: PrismaClient = new PrismaClient();
+import prisma from "@/db";
 
 export async function p2pTransfer(to: string, amount: number) {
   const session = await getServerSession(authOptions);
@@ -27,9 +23,7 @@ export async function p2pTransfer(to: string, amount: number) {
       message: "User not found"
     }
   }
-
-  // Explicitly type the 'tx' parameter as `Prisma.TransactionClient`
-  await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+  await prisma.$transaction(async (tx) => {
     await tx.$queryRaw`SELECT * FROM "Balance" WHERE "userId" = ${Number(from)} FOR UPDATE`;
 
     const fromBalance = await tx.balance.findUnique({
@@ -45,10 +39,12 @@ export async function p2pTransfer(to: string, amount: number) {
       data: { amount: { decrement: amount } },
     });
 
+
     await tx.balance.update({
       where: { userId: toUser.id },
       data: { amount: { increment: amount } },
     });
+
 
     await tx.p2pTransfer.create({
       data: {
@@ -57,6 +53,6 @@ export async function p2pTransfer(to: string, amount: number) {
         amount,
         timestamp: new Date()
       }
-    });
+    })
   });
 }
